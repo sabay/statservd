@@ -67,6 +67,7 @@ int blockStram::open(char * filename_, TYPE type_){
     realSize = 0;
     localCursor =0;
     postOpen();
+    return fd;
 };
 
 int blockStram::read(char *buff,size_t maxsize){

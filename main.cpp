@@ -17,7 +17,8 @@ uint32_t black_tizer_id[]= { 2747, 698996 };
 
 struct compareFields inputFilt[] ={
     { table1Fields[1].offset, tableFields::INT32, sizeof(tizer_id)/sizeof(tizer_id[0]), sizeof(black_tizer_id)/sizeof(black_tizer_id[0]), (char *)tizer_id , (char *)black_tizer_id},
-    { table1Fields[3].offset, tableFields::INT32, 1, 0, (char *)site_id, NULL }
+    { table1Fields[3].offset, tableFields::INT32, 1, 0, (char *)site_id, NULL },
+    {}
 };
 
 
@@ -34,22 +35,13 @@ mergeFiles[mergeFilesCount]->read(fileHeader,sizeof(fileHeader));
 ++mergeFilesCount;
 
 
-mergeFiles[mergeFilesCount]= new flatFileStream(1024*1024);
-mergeFiles[mergeFilesCount]->open("data/3.bin",blockStram::READ);
+mergeFiles[mergeFilesCount]= new snappyFileStream(1024*1024);
+mergeFiles[mergeFilesCount]->open("data/3.bin.snap",blockStram::READ);
 mergeFiles[mergeFilesCount]->read(fileHeader,sizeof(fileHeader));
 ++mergeFilesCount;
 
+n_way_merge_date<table1>(mergeFiles, mergeFilesCount);
 
-
-snappyFileStream out(1024*1024);
-out.open("data/out.bin.snap",blockStram::WRITE);
-//flatFileStream out(1024*1024);
-//out.open("data/out.bin",blockStram::WRITE);
-out.write(fileHeader,sizeof(fileHeader));
-
-n_way_merge<table1>(mergeFiles, mergeFilesCount, out);
-
-out.close();
 
 // search VVV
 
